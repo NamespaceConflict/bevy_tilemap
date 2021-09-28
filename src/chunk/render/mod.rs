@@ -1,5 +1,4 @@
 use crate::lib::*;
-
 macro_rules! build_chunk_pipeline {
     ($handle: ident, $id: expr, $name: ident, $file: expr) => {
         /// The constant render pipeline for a chunk.
@@ -11,16 +10,18 @@ macro_rules! build_chunk_pipeline {
             PipelineDescriptor {
                 color_target_states: vec![ColorTargetState {
                     format: TextureFormat::default(),
-                    color_blend: BlendState {
-                        src_factor: BlendFactor::SrcAlpha,
-                        dst_factor: BlendFactor::OneMinusSrcAlpha,
-                        operation: BlendOperation::Add,
-                    },
-                    alpha_blend: BlendState {
-                        src_factor: BlendFactor::One,
-                        dst_factor: BlendFactor::One,
-                        operation: BlendOperation::Add,
-                    },
+                    blend: Some(BlendState {
+                        color: BlendComponent {
+                            src_factor: BlendFactor::SrcAlpha,
+                            dst_factor: BlendFactor::OneMinusSrcAlpha,
+                            operation: BlendOperation::Add,
+                        },
+                        alpha: BlendComponent {
+                            src_factor: BlendFactor::One,
+                            dst_factor: BlendFactor::One,
+                            operation: BlendOperation::Add,
+                        },
+                    }),
                     write_mask: ColorWrite::ALL,
                 }],
                 depth_stencil: Some(DepthStencilState {
@@ -38,7 +39,6 @@ macro_rules! build_chunk_pipeline {
                         slope_scale: 0.0,
                         clamp: 0.0,
                     },
-                    clamp_depth: false,
                 }),
                 ..PipelineDescriptor::new(ShaderStages {
                     vertex: shaders

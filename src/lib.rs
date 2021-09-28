@@ -136,7 +136,7 @@ pub enum TilemapSystem {
 }
 
 impl Plugin for TilemapPlugin {
-    fn build(&self, app: &mut AppBuilder) {
+    fn build(&self, app: &mut App) {
         app.add_asset::<Tilemap>()
             .add_stage_before(
                 CoreStage::PostUpdate,
@@ -173,7 +173,7 @@ impl Plugin for TilemapPlugin {
                 crate::system::tilemap_visibility_change.system(),
             );
 
-        let world = app.world_mut().cell();
+        let world = app.world.cell();
         // let mut render_graph = world.get_resource_mut::<RenderGraph>().unwrap();
         let mut pipelines = world
             .get_resource_mut::<Assets<PipelineDescriptor>>()
@@ -208,7 +208,7 @@ mod lib {
     #[cfg(test)]
     pub(crate) use bevy_app::ScheduleRunnerPlugin;
     pub(crate) use bevy_app::{
-        AppBuilder, CoreStage, Events, Plugin, PluginGroup, PluginGroupBuilder,
+        App, CoreStage, Events, Plugin, PluginGroup, PluginGroupBuilder,
     };
     pub(crate) use bevy_asset::{AddAsset, Assets, Handle, HandleUntyped};
     #[cfg(test)]
@@ -235,7 +235,7 @@ mod lib {
         pipeline::{
             BlendFactor, BlendOperation, BlendState, ColorTargetState, ColorWrite, CompareFunction,
             DepthBiasState, DepthStencilState, PipelineDescriptor, PrimitiveTopology,
-            RenderPipeline, RenderPipelines, StencilFaceState, StencilState,
+            RenderPipeline, RenderPipelines, StencilFaceState, StencilState, BlendComponent
         },
         render_graph::base::MainPass,
         shader::{Shader, ShaderStage, ShaderStages},
